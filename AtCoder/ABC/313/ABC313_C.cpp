@@ -1,7 +1,7 @@
 // 2024/03/20 17:32:31
 // 2024/03/20 17:41:59 14WA
 // 2024/03/20 18:11:38 2WA
-// 2024/03/20 18:39:19 AC.
+// 2024/03/20 18:39:19 2WA
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -16,22 +16,15 @@ int main(){
     for (int a : A) {
         sum += a;
     }
-    int ave_s = sum / N; // 平均値(小数点以下切り捨て)
-    long long min_diff_sum = INT64_MAX, ans;
-    for (int ave = ave_s - 2; ave < ave_s + 3; ave++) { // 適当な範囲で探索(てきとう)
-        long long diff_abs_sum = 0, diff_sum = 0;
-        for (int a : A) {
-            diff_abs_sum += abs(a - ave);
-            diff_sum += a - ave;
-        }
-        diff_sum = abs(diff_sum);
-        if (diff_sum < min_diff_sum) {
-            min_diff_sum = diff_sum;
-            ans = (diff_abs_sum - diff_sum) / 2;
-        }
+    int ave = sum * 10 / N % 10 < 5 ? sum / N : sum / N + 1; // 平均値(四捨五入)
+    long long diff_abs_sum = 0, diff_sum = 0;
+    for (int a : A) {
+        diff_abs_sum += abs(a - ave);
+        diff_sum += a - ave;
     }
+    diff_sum = abs(diff_sum);
 
-    cout << ans << endl;
+    cout << (diff_abs_sum - diff_sum) / 2 << endl;
     return 0;
 }
 /*
@@ -82,4 +75,44 @@ ave7だと
 
 両方試しちゃうほうが早そう()
 やっぱり2WAなんだが…()
+*/
+/*
+1111119 15
+2222222
+
+1111117 13,1
+
+3445
+4444
+1001 2,0
+
+3456
+4444
+1012 4,2
+
+2456
+4444
+2012 5,1
+4445
+2011 4,0
+
+2457
+4444 6,2
+4455
+2002 4,0
+
+2458
+4444 7,3
+4555 6,0
+
+1,1,1,1,1,100 (105/6=17.5)
+17,17,17,17,17,17 163,3 -> 80
+17,17,17,18,18,18 164,0 -> 82
+18,18,18,18,18,18 167,3 -> 82
+1 100 100 100 100 100 (501/6=83.5)
+83 83 83 83 83 83 167,3 -> 82
+83 83 83 84 84 84 164,0 -> 82
+84 84 84 84 84 84 163,3 -> 80
+やっと反例を見つけた。
+2024/03/29 21:02
 */
