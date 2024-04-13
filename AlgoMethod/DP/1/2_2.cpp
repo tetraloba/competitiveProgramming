@@ -24,3 +24,8 @@ int main(){
 /*
 ゴールから戻っていくと考える
 */
+/*
+2024/04/12 13:12:31
+配るDPの実装になるらしい。
+https://algo-method.com/descriptions/78
+*/
