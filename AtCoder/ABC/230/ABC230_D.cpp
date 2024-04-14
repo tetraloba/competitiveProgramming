@@ -1,29 +1,45 @@
 // 2024/04/14 17:05:26
-// 2024/04/14 18:26:04 WA
+// 2024/04/14 18:26:04 11WA
+// 2024/04/14 18:40:55 3WA 5TLE
+// 2024/04/14 18:59:56 5WA
+// 2024/04/14 19:11:43 AC.
 #include <iostream>
 #include <vector>
+#include <set>
 #include <algorithm>
 using namespace std;
 int main(){
     int N, D;
     cin >> N >> D;
-    vector<pair<int, int>> walls; // (座標, (lなら-1 rなら1))
+    vector<pair<int, pair<bool, int>>> walls; // (座標, (開閉, 壁id)) (開,閉)=(false,true)
     for (int i = 0; i < N; i++) {
         int l, r;
         cin >> l >> r;
-        walls.push_back({l - D + 1, -1});
-        walls.push_back({r, 1});
+        walls.push_back({l - D + 1, {false, i}});
+        walls.push_back({r, {true, i}});
     }
 
     sort(walls.begin(), walls.end());
-    bool pre_l = false; // 直前がl(-1)だったか
+    vector<bool> broken(N); // その壁が破壊されたかどうか
+    set<int> dup; // 現在重複している壁の集合
     int ans = 0;
-    for (auto w : walls) {
-        // cout << '(' << w.first << ',' << w.second << ')'; // debug
-        if (pre_l && w.second == 1) {
-            ans++;
+    for (auto [pos, atr] : walls) {
+        auto [close, id] = atr;
+        // cout << pos << ',' << id << ' '; // debug
+        if (broken[id]) { // すでに破壊された壁
+            continue;
         }
-        pre_l = w.second == -1;
+        if (close) {
+            /* 殴る */
+            // cout << "bang!(" << dup.size() << ')' << endl; // debug
+            for (int i : dup) {
+                broken[i] = true;
+            }
+            dup.clear();
+            ans++;
+        } else {
+            dup.insert(id);
+        }
     }
     cout << ans << endl;
     return 0;
@@ -70,4 +86,8 @@ int main(){
 じゃあ単純に括弧まで落とし込むのでは駄目だな。
 壁の重複数が減るところで殴るという発想は間違っていないと思う。
 殴った後消えた壁を追跡する必要がありそう。(2024/04/14 18:32:19)
+*/
+/*
+最後に殴った位置を記録しておいて、ペアの開き括弧がその位置よりも前(破壊済)か後ろ(未破壊)かで判定すれば良いのか。
+id => 開括弧の位置 という配列を作ればO(1)で判定できる。
 */
