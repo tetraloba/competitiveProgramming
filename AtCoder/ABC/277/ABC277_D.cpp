@@ -1,5 +1,6 @@
 // 2024/04/21 17:34:49
-// 
+// 2024/04/21 18:30:08 7WA
+// 2024/04/21 18:38:47 AC.
 #include <iostream>
 #include <vector>
 #include <map>
@@ -19,53 +20,32 @@ int main(){
         sum += a;
     }
 
-    /* min_num, sum_key */
-    int min_num = INT32_MAX;
-    long long sum_key = 0;
+    long long rans = 0; // 机上に出せる総和の最大値
+    long long t = 0; // ransの候補
     int expect = 0;
     for (auto [k, v] : mp) {
         if (k != expect) {
-            min_num = 0;
-        }
-        if (v < min_num) {
-            min_num = v;
-        }
-        sum_key += k;
-        expect = k + 1;
-        cout << k << ' ' << v << endl;
-    }
-
-    long long rans = 0;
-    long long t = 0;
-    expect = 0;
-    for (auto [k, v] : mp) {
-        if (v <= min_num || k != expect) {
             t = 0;
         }
-        t += k;
+        t += (long long)k * v;
         if (rans < t) {
             rans = t;
         }
-        expect = k + 1;
+        expect = (k + 1) % M;
     }
-    if ((*mp.rbegin()).second == M - 1) {
-        expect = 0;
+    if (rans < sum) {
         for (auto [k, v] : mp) {
-            if (v <= min_num || k != expect) {
-                t = 0;
+            if (k != expect) {
                 break;
             }
-            t += k;
+            t += (long long)k * v;
             expect++;
         }
         if (rans < t) {
             rans = t;
         }
     }
-    cout << rans << endl;
-    rans += sum_key * min_num;
-    cout << rans << endl;
-
+    // cout << rans << endl; // debug
     cout << sum - rans << endl;
     return 0;
 }
