@@ -25,3 +25,7 @@ int main(){
     cout << max(max_with_poison, max_without_poison) << endl;
     return 0;
 }
+/*
+動的計画法(DP)の問題であることまでは分かっているんだが、DPらしく解けていないのが残念だな。
+DP[][]を作りたい。(2024/07/29 21:38:15)
+*/
