@@ -1,6 +1,7 @@
 // 第１１回日本情報オリンピック 予選（過去問） D - パスタ (Pasta) https://atcoder.jp/contests/joi2012yo/tasks/joi2012yo_d
 // 2024/12/01 18:44:01
 // 2024/12/01 20:07:57 AC.
+// 2024/12/01 20:22:38 AC. compact
 #include <iostream>
 #include <vector>
 #define MOD 10000
@@ -20,59 +21,20 @@ int main(){
         dec[A] = B;
     }
 
-    /* day0, day1 の初期化 (もう少しきれいにも書けるが、とりあえず) */
-    if (dec[0] == -1) {
-        if (dec[1] == -1) {
-            for (int i = 0; i < 9; i++) {
-                dp[1][i] = 1;
-            }
-            sum[1] = 9;
-        } else {
-            for (int i = 0; i < 9; i++) {
-                if (i % 3 == dec[1]) {
-                    dp[1][i] = 1;
-                } else {
-                    dp[1][i] = 0;
-                }
-            }
-            sum[1] = 3;
-        }
-    } else {
-        if (dec[1] == -1) {
-            for (int i = 0; i < 9; i++) {
-                if (i / 3 == dec[0]) {
-                    dp[1][i] = 1;
-                } else {
-                    dp[1][i] = 0;
-                }
-            }
-            sum[1] = 3;
-        } else {
-            for (int i = 0; i < 9; i++) {
-                if (i / 3 == dec[0] && i % 3 == dec[1]) {
-                    dp[1][i] = 1;
-                } else {
-                    dp[1][i] = 0;
-                }
-            }
-            sum[1] = 1;
+    /* day0, day1 の初期化 */
+    for (int i = 0; i < 9; i++) {
+        if ( (dec[0] == -1 || i / 3 == dec[0]) && (dec[1] == -1 || i % 3 == dec[1]) ) {
+            dp[1][i] = 1;
+            sum[1] += 1;
         }
     }
     /* day2以降 */
     for (int i = 2; i < N; i++) {
         for (int j = 0; j < 9; j++) {
-            if (dec[i] == -1) {
-                long long tmp_ij = 0;
-                for (int tgt : tgts[j]) { // O(2~3)
+            if (dec[i] == -1 || j % 3 == dec[i]) {
+                for (int tgt : tgts[j]) {
                     dp[i][j] += dp[i - 1][tgt];
                     dp[i][j] %= MOD;
-                }
-            } else {
-                if (j % 3 == dec[i]) {
-                    for (int tgt : tgts[j]) {
-                        dp[i][j] += dp[i - 1][tgt];
-                        dp[i][j] %= MOD;
-                    }
                 }
             }
             sum[i] += dp[i][j];
