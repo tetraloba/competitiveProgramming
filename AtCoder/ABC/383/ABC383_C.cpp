@@ -1,8 +1,9 @@
 // 2025/01/02 09:48:28
 // 2025/01/02 10:10:02 TLE
+// 2025/01/02 10:24:49 AC.
 #include <iostream>
 #include <vector>
-#include <stack>
+#include <queue>
 using namespace std;
 struct Pos{
     int h;
@@ -19,48 +20,39 @@ bool outside(Pos pos) {
     return pos.h < 0 || H <= pos.h || pos.w < 0 || W <= pos.w;
 }
 int main(){
-    // cin >> H >> W >> D;
-    H = 1000; // debug
-    W = 1000; // debug
-    D = 1000000; // debug
+    cin >> H >> W >> D;
     vector<string> S(H);
-    // for (string &s : S) {
-    //     cin >> s;
-    // }
     for (string &s : S) {
-        for (int i = 0; i < W; i++) {
-            s.push_back('H');
-        }
+        cin >> s;
     }
     
     vector<vector<int>> humidity(H, vector<int>(W));
+    queue<Node> que;
     for (int h = 0; h < H; h++) {
         for (int w = 0; w < W; w++) {
-            if (S[h][w] != 'H') {
+            if (S[h][w] == 'H') {
+                que.push({h, w, D + 1});
+            }
+        }
+    }
+    while (!que.empty()) {
+        Node tgt = que.front(); que.pop();
+        if (tgt.humidity <= humidity[tgt.pos.h][tgt.pos.w]) {
+            continue;
+        }
+        humidity[tgt.pos.h][tgt.pos.w] = tgt.humidity;
+        for (Pos dir : DIR4) {
+            Node next = {tgt.pos.h + dir.h, tgt.pos.w + dir.w, tgt.humidity - 1};
+            if (outside(next.pos)) {
                 continue;
             }
-            stack<Node> stk;
-            stk.push({h, w, D + 1});
-            while (!stk.empty()) {
-                Node tgt = stk.top(); stk.pop();
-                if (tgt.humidity <= humidity[tgt.pos.h][tgt.pos.w]) {
-                    continue;
-                }
-                humidity[tgt.pos.h][tgt.pos.w] = tgt.humidity;
-                for (Pos dir : DIR4) {
-                    Node next = {tgt.pos.h + dir.h, tgt.pos.w + dir.w, tgt.humidity - 1};
-                    if (outside(next.pos)) {
-                        continue;
-                    }
-                    if (S[next.pos.h][next.pos.w] != '.') {
-                        continue;
-                    }
-                    if (next.humidity <= humidity[next.pos.h][next.pos.w]) {
-                        continue;
-                    }
-                    stk.push(next);
-                }
+            if (S[next.pos.h][next.pos.w] != '.') {
+                continue;
             }
+            if (next.humidity <= humidity[next.pos.h][next.pos.w]) {
+                continue;
+            }
+            que.push(next);
         }
     }
 
@@ -89,4 +81,5 @@ int main(){
 Dから塗り拡げていけば良い？ 2025/01/02 09:51:57
 んーDFSだとTLEか・・・？
 最初に'H'を全部PUSHして幅優先のほうが良いのか？計算量見積もれないンゴ…(2025/01/02 10:20:31)
+確かに、BFSなら塗り直しが起こり得ないのか。
 */
