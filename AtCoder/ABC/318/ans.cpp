@@ -15,10 +15,13 @@ int main() {
 
 	vector<long long> dp(1 << N);
     for (int b = 0; b < dp.size(); b++) {
-        for (int i = N - 1; 0 <= i; i--) {
-            cerr << (b >> i & 1);
+        if (b != 0 && (b&1) == 0) {
+            continue;
         }
-        cerr << endl;
+        // for (int i = N - 1; 0 <= i; i--) {
+        //     cerr << (b >> i & 1);
+        // }
+        // cerr << endl;
 		int l = -1;
         for (int i = 0; i < N; i++) {
             if (!(b >> i & 1)) {
@@ -28,20 +31,20 @@ int main() {
         }
         for (int i = 0; i < N; i++) {
             if (!(b >> i & 1)) {
-                int newb = b | (1 << l) | (1 << i);
+                int newb = b | 1 << l | 1 << i;
                 dp[newb] = max(dp[newb], dp[b] + weight[l][i]);
-                cerr << '\t';
-                for (int i = N - 1; 0 <= i; i--) {
-                    cerr << (newb >> i & 1);
-                }
-                cerr << endl;
+                // cerr << '\t';
+                // for (int i = N - 1; 0 <= i; i--) {
+                //     cerr << (newb >> i & 1);
+                // }
+                // cerr << endl;
             }
         }
 	}
-    for (int d : dp) {
-        cerr << d << ' ';
-    }
-    cerr << endl;
+    // for (int d : dp) {
+    //     cerr << d << ' ';
+    // }
+    // cerr << endl;
 	cout << dp.back() << endl;
 }
 /*
@@ -148,4 +151,7 @@ int main() {
 0 x 1 2
 1   x 3
 2     x
+
+110=6 は 001→111として処理されている。001は頂点0を使わないものと同値。
+そのため、 b != 0 && (b&1) == 0 は処理しなくても問題ない。
 */
