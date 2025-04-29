@@ -1,6 +1,7 @@
 // 2025/04/29 07:46:29
 // 2025/04/29 08:27:31 WA.
 // 2025/04/29 09:17:07 AC.
+// code_formula_2014_final_F - 100個の円
 #include <iostream>
 #include <vector>
 using namespace std;

@@ -1,5 +1,6 @@
 // 2025/04/29 07:42:29
 // 2025/04/29 07:46:27 AC.
+// ABC040_C - 柱柱柱柱柱
 #include <iostream>
 #include <vector>
 using namespace std;

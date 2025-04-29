@@ -1,5 +1,6 @@
 // 2025/04/29 07:35:08
 // 2025/04/29 07:42:21 AC.
+// ABC264_D - "redocta".swap(i,i+1)
 #include <iostream>
 #include <vector>
 #include <map>

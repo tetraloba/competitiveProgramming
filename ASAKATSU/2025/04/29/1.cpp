@@ -1,5 +1,6 @@
 // 2025/04/29 07:30:14
 // 2025/04/29 07:31:04 AC.
+// ABC234_A - Weird Function
 #include <iostream>
 #include <vector>
 using namespace std;
